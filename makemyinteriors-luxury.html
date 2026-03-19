@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MakeMyInteriors — Luxury Interiors. Crafted Precision.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #F1E194;
+    --gold-dim: rgba(241,225,148,0.18);
+    --gold-mid: rgba(241,225,148,0.55);
+    --burgundy: #5B0E14;
+    --burgundy-deep: #3A080D;
+    --burgundy-mid: #7A1520;
+    --dark: #1A0508;
+    --text-light: #F5EED8;
+    --text-muted: rgba(245,238,216,0.55);
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'Jost', sans-serif;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--dark);
+    color: var(--text-light);
+    font-family: var(--sans);
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CUSTOM CURSOR */
+  .cursor {
+    position: fixed;
+    width: 12px; height: 12px;
+    background: var(--gold);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%,-50%);
+    transition: width .3s, height .3s, background .3s;
+    mix-blend-mode: difference;
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 36px; height: 36px;
+    border: 1px solid var(--gold-mid);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%,-50%);
+    transition: all .15s cubic-bezier(.16,1,.3,1);
+  }
+  body:has(a:hover) .cursor, body:has(button:hover) .cursor { width: 20px; height: 20px; }
+  body:has(a:hover) .cursor-ring, body:has(button:hover) .cursor-ring { width: 56px; height: 56px; border-color: var(--gold); }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 3px; }
+  ::-webkit-scrollbar-track { background: var(--dark); }
+  ::-webkit-scrollbar-thumb { background: var(--gold-mid); }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    padding: 28px 60px;
+    display: flex; align-items: center; justify-content: space-between;
+    transition: all .6s cubic-bezier(.16,1,.3,1);
+  }
+  nav.solid {
+    background: rgba(26,5,8,0.95);
+    backdrop-filter: blur(20px);
+    padding: 18px 60px;
+    border-bottom: 1px solid var(--gold-dim);
+  }
+  .nav-logo {
+    font-family: var(--serif);
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--gold);
+    letter-spacing: .04em;
+    text-decoration: none;
+  }
+  .nav-logo span { font-weight: 300; font-style: italic; color: var(--text-light); }
+  .nav-links { display: flex; gap: 44px; list-style: none; }
+  .nav-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: .78rem;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    transition: color .3s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-cta {
+    border: 1px solid var(--gold-mid);
+    padding: 10px 28px;
+    color: var(--gold) !important;
+    transition: all .3s !important;
+    letter-spacing: .15em !important;
+  }
+  .nav-cta:hover { background: var(--gold) !important; color: var(--dark) !important; }
+
+  /* CINEMATIC INTRO */
+  #intro {
+    position: fixed; inset: 0; z-index: 500;
+    background: var(--dark);
+    overflow: hidden;
+  }
+  .intro-slide {
+    position: absolute; inset: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    animation: kenBurns 8s cubic-bezier(.25,.46,.45,.94) forwards;
+  }
+  .intro-slide.active { opacity: 1; }
+  @keyframes kenBurns {
+    0%   { transform: scale(1.08); opacity: 0; }
+    8%   { opacity: 1; }
+    85%  { opacity: 1; }
+    100% { transform: scale(1.18); opacity: 0; }
+  }
+  .intro-overlay {
+    position: absolute; inset: 0; z-index: 2;
+    background: linear-gradient(
+      180deg,
+      rgba(26,5,8,0.3) 0%,
+      rgba(91,14,20,0.45) 50%,
+      rgba(26,5,8,0.85) 100%
+    );
+  }
+  .intro-text {
+    position: absolute; inset: 0; z-index: 3;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 40px;
+  }
+  .intro-line {
+    font-family: var(--serif);
+    font-size: clamp(3rem, 7vw, 6.5rem);
+    font-weight: 300;
+    color: var(--text-light);
+    letter-spacing: .04em;
+    line-height: 1.05;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 1.2s cubic-bezier(.16,1,.3,1);
+  }
+  .intro-line.show { opacity: 1; transform: translateY(0); }
+  .intro-line em { font-style: italic; color: var(--gold); }
+  .intro-divider {
+    width: 60px; height: 1px;
+    background: var(--gold-mid);
+    margin: 24px auto;
+    opacity: 0;
+    transition: opacity 1s ease;
+  }
+  .intro-divider.show { opacity: 1; }
+  .intro-sub {
+    font-family: var(--sans);
+    font-size: .78rem;
+    letter-spacing: .3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0;
+    transition: opacity 1.2s ease .3s;
+  }
+  .intro-sub.show { opacity: 1; }
+  .intro-skip {
+    position: absolute; bottom: 40px; right: 60px; z-index: 4;
+    color: var(--text-muted);
+    font-size: .7rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    cursor: none;
+    border: none; background: none;
+    transition: color .3s;
+  }
+  .intro-skip:hover { color: var(--gold); }
+  .intro-progress {
+    position: absolute; bottom: 0; left: 0; right: 0; z-index: 4;
+    height: 2px;
+    background: var(--gold-dim);
+    overflow: hidden;
+  }
+  .intro-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--burgundy-mid), var(--gold));
+    width: 0%;
+    transition: width linear;
+  }
+
+  /* MAIN CONTENT */
+  #main { opacity: 0; transition: opacity 1.2s ease; }
+  #main.visible { opacity: 1; }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    height: 100vh;
+    display: flex; align-items: flex-end;
+    overflow: hidden;
+    padding: 0 60px 80px;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background-image: url('https://images.unsplash.com/photo-1600210492493-0946911123ea?w=1920&q=85');
+    background-size: cover;
+    background-position: center;
+    transform: scale(1.05);
+    animation: heroFloat 20s ease-in-out infinite alternate;
+  }
+  @keyframes heroFloat {
+    from { transform: scale(1.05) translateY(0); }
+    to   { transform: scale(1.08) translateY(-20px); }
+  }
+  .hero-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(
+      120deg,
+      rgba(26,5,8,0.92) 0%,
+      rgba(91,14,20,0.5) 50%,
+      rgba(26,5,8,0.3) 100%
+    );
+  }
+  .hero-content { position: relative; z-index: 2; max-width: 720px; }
+  .hero-eyebrow {
+    font-size: .72rem;
+    letter-spacing: .35em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 24px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: block;
+    width: 40px; height: 1px;
+    background: var(--gold-mid);
+  }
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(3.5rem, 6vw, 5.5rem);
+    font-weight: 300;
+    line-height: 1.05;
+    margin-bottom: 28px;
+    color: var(--text-light);
+  }
+  .hero h1 strong { font-weight: 700; color: var(--gold); display: block; }
+  .hero p {
+    font-size: .95rem;
+    line-height: 1.8;
+    color: var(--text-muted);
+    max-width: 480px;
+    margin-bottom: 48px;
+    letter-spacing: .02em;
+  }
+  .hero-btns { display: flex; gap: 20px; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--gold);
+    color: var(--dark);
+    border: none;
+    padding: 16px 44px;
+    font-family: var(--sans);
+    font-size: .78rem;
+    font-weight: 500;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: none;
+    transition: all .4s cubic-bezier(.16,1,.3,1);
+    display: inline-block;
+  }
+  .btn-primary:hover { background: var(--text-light); transform: translateY(-2px); }
+  .btn-secondary {
+    border: 1px solid var(--gold-mid);
+    color: var(--gold);
+    padding: 16px 44px;
+    font-family: var(--sans);
+    font-size: .78rem;
+    font-weight: 400;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: none;
+    transition: all .4s;
+    display: inline-block;
+  }
+  .btn-secondary:hover { background: var(--gold-dim); border-color: var(--gold); }
+  .hero-scroll {
+    position: absolute; right: 60px; bottom: 80px; z-index: 2;
+    display: flex; flex-direction: column; align-items: center; gap: 12px;
+    color: var(--text-muted);
+    font-size: .65rem;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+  }
+  .hero-scroll-line {
+    width: 1px; height: 60px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    animation: scrollLine 2s ease-in-out infinite;
+  }
+  @keyframes scrollLine {
+    0%, 100% { opacity: 1; transform: scaleY(1); }
+    50% { opacity: .4; transform: scaleY(.6); }
+  }
+
+  /* SECTION COMMONS */
+  section { padding: 120px 60px; }
+  .section-label {
+    font-size: .68rem;
+    letter-spacing: .4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .section-label::before {
+    content: ''; display: block;
+    width: 30px; height: 1px;
+    background: var(--gold-mid);
+  }
+  h2 {
+    font-family: var(--serif);
+    font-size: clamp(2.5rem, 4.5vw, 4rem);
+    font-weight: 300;
+    line-height: 1.1;
+    color: var(--text-light);
+  }
+  h2 em { font-style: italic; color: var(--gold); }
+  h2 strong { font-weight: 700; }
+
+  /* REVEAL ANIMATION */
+  .reveal {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity .9s cubic-bezier(.16,1,.3,1), transform .9s cubic-bezier(.16,1,.3,1);
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: .1s; }
+  .reveal-delay-2 { transition-delay: .2s; }
+  .reveal-delay-3 { transition-delay: .3s; }
+  .reveal-delay-4 { transition-delay: .4s; }
+
+  /* ABOUT */
+  .about { background: var(--burgundy-deep); }
+  .about-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    max-width: 1300px;
+    margin: 0 auto;
+  }
+  .about-img-wrap {
+    position: relative;
+    height: 600px;
+    overflow: hidden;
+  }
+  .about-img-wrap img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 8s cubic-bezier(.25,.46,.45,.94);
+  }
+  .about-img-wrap:hover img { transform: scale(1.06); }
+  .about-img-accent {
+    position: absolute;
+    bottom: -20px; right: -20px;
+    width: 200px; height: 200px;
+    border: 1px solid var(--gold-mid);
+    z-index: -1;
+  }
+  .about-img-tag {
+    position: absolute;
+    top: 30px; left: -30px;
+    background: var(--gold);
+    color: var(--dark);
+    padding: 12px 20px;
+    font-size: .7rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    font-weight: 500;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+  }
+  .about-text { padding: 20px 0; }
+  .about-text h2 { margin-bottom: 32px; }
+  .about-text p {
+    color: var(--text-muted);
+    line-height: 1.9;
+    margin-bottom: 20px;
+    font-size: .93rem;
+  }
+  .about-stats {
+    display: grid; grid-template-columns: repeat(3,1fr);
+    gap: 30px; margin-top: 48px;
+    padding-top: 48px;
+    border-top: 1px solid var(--gold-dim);
+  }
+  .stat-num {
+    font-family: var(--serif);
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: .7rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-top: 8px;
+  }
+
+  /* SERVICES */
+  .services { background: var(--dark); }
+  .services-inner { max-width: 1300px; margin: 0 auto; }
+  .services-header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 70px;
+    flex-wrap: wrap; gap: 30px;
+  }
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+  .service-card {
+    position: relative;
+    height: 380px;
+    overflow: hidden;
+    cursor: none;
+  }
+  .service-card img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform .8s cubic-bezier(.25,.46,.45,.94);
+    filter: brightness(.5) saturate(.8);
+  }
+  .service-card:hover img { transform: scale(1.08); filter: brightness(.35) saturate(.6); }
+  .service-card-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(26,5,8,.95) 0%, rgba(91,14,20,.3) 60%, transparent 100%);
+    transition: background .5s;
+  }
+  .service-card:hover .service-card-overlay {
+    background: linear-gradient(to top, rgba(26,5,8,.98) 0%, rgba(91,14,20,.7) 100%);
+  }
+  .service-card-content {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 36px 32px;
+    transform: translateY(20px);
+    transition: transform .5s cubic-bezier(.16,1,.3,1);
+  }
+  .service-card:hover .service-card-content { transform: translateY(0); }
+  .service-icon {
+    width: 44px; height: 44px; margin-bottom: 16px;
+    border: 1px solid var(--gold-dim);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gold);
+    font-size: 1.2rem;
+    transition: all .4s;
+  }
+  .service-card:hover .service-icon { background: var(--gold); color: var(--dark); border-color: var(--gold); }
+  .service-card h3 {
+    font-family: var(--serif);
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--text-light);
+    margin-bottom: 10px;
+  }
+  .service-card p {
+    font-size: .8rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: opacity .4s, max-height .5s;
+  }
+  .service-card:hover p { opacity: 1; max-height: 120px; }
+  .service-gold-line {
+    width: 0; height: 1px;
+    background: var(--gold);
+    margin-bottom: 14px;
+    transition: width .5s cubic-bezier(.16,1,.3,1);
+  }
+  .service-card:hover .service-gold-line { width: 40px; }
+
+  /* PORTFOLIO */
+  .portfolio { background: var(--burgundy-deep); padding-bottom: 0; }
+  .portfolio-header { max-width: 1300px; margin: 0 auto 60px; }
+  .portfolio-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: 400px 400px;
+    gap: 3px;
+  }
+  .portfolio-item {
+    position: relative; overflow: hidden; cursor: none;
+  }
+  .portfolio-item:first-child { grid-row: 1 / 3; }
+  .portfolio-item img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform .9s cubic-bezier(.25,.46,.45,.94);
+  }
+  .portfolio-item:hover img { transform: scale(1.08); }
+  .portfolio-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(26,5,8,.9) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity .5s;
+  }
+  .portfolio-item:hover .portfolio-overlay { opacity: 1; }
+  .portfolio-info {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 30px;
+    transform: translateY(10px);
+    opacity: 0;
+    transition: all .5s cubic-bezier(.16,1,.3,1);
+  }
+  .portfolio-item:hover .portfolio-info { opacity: 1; transform: translateY(0); }
+  .portfolio-info span {
+    display: block; font-size: .68rem;
+    letter-spacing: .25em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 6px;
+  }
+  .portfolio-info h4 {
+    font-family: var(--serif);
+    font-size: 1.4rem; font-weight: 400;
+    color: var(--text-light);
+  }
+
+  /* PROCESS */
+  .process {
+    background: var(--dark);
+    overflow: hidden;
+  }
+  .process-inner { max-width: 1300px; margin: 0 auto; }
+  .process-steps {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    margin-top: 70px;
+    position: relative;
+  }
+  .process-steps::before {
+    content: '';
+    position: absolute;
+    top: 28px; left: 10%; right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-mid), transparent);
+  }
+  .process-step { text-align: center; padding: 0 20px; }
+  .step-num {
+    width: 56px; height: 56px;
+    border: 1px solid var(--gold-mid);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 24px;
+    font-family: var(--serif);
+    font-size: 1.2rem;
+    color: var(--gold);
+    background: var(--dark);
+    position: relative; z-index: 1;
+    transition: all .4s;
+  }
+  .process-step:hover .step-num {
+    background: var(--gold);
+    color: var(--dark);
+    transform: scale(1.1);
+  }
+  .step-title {
+    font-family: var(--serif);
+    font-size: 1.15rem;
+    font-weight: 400;
+    color: var(--text-light);
+    margin-bottom: 12px;
+  }
+  .step-desc {
+    font-size: .78rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+
+  /* WHY US */
+  .why { background: var(--burgundy-deep); }
+  .why-inner { max-width: 1300px; margin: 0 auto; }
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 1px;
+    margin-top: 70px;
+    background: var(--gold-dim);
+  }
+  .why-card {
+    background: var(--burgundy-deep);
+    padding: 50px 36px;
+    transition: background .4s;
+    position: relative;
+    overflow: hidden;
+  }
+  .why-card::before {
+    content: '';
+    position: absolute; bottom: 0; left: 0;
+    width: 100%; height: 2px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform .5s cubic-bezier(.16,1,.3,1);
+  }
+  .why-card:hover::before { transform: scaleX(1); }
+  .why-card:hover { background: rgba(91,14,20,.5); }
+  .why-icon {
+    font-size: 2rem; margin-bottom: 24px;
+    display: block;
+    color: var(--gold);
+  }
+  .why-card h3 {
+    font-family: var(--serif);
+    font-size: 1.3rem;
+    font-weight: 400;
+    margin-bottom: 14px;
+    color: var(--text-light);
+  }
+  .why-card p {
+    font-size: .82rem;
+    color: var(--text-muted);
+    line-height: 1.8;
+  }
+
+  /* TESTIMONIALS */
+  .testimonials { background: var(--dark); overflow: hidden; }
+  .test-inner { max-width: 1100px; margin: 0 auto; text-align: center; }
+  .test-carousel { position: relative; margin-top: 70px; min-height: 280px; }
+  .test-slide {
+    position: absolute; inset: 0;
+    opacity: 0; transform: translateY(20px);
+    transition: all .7s cubic-bezier(.16,1,.3,1);
+    pointer-events: none;
+  }
+  .test-slide.active {
+    opacity: 1; transform: translateY(0);
+    position: relative; pointer-events: all;
+  }
+  .test-quote {
+    font-family: var(--serif);
+    font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--text-light);
+    line-height: 1.6;
+    margin-bottom: 40px;
+  }
+  .test-quote::before {
+    content: '\201C';
+    font-size: 5rem;
+    color: var(--gold-dim);
+    line-height: 0;
+    vertical-align: -0.5em;
+    margin-right: 8px;
+  }
+  .test-author {
+    display: flex; align-items: center; justify-content: center; gap: 16px;
+  }
+  .test-author-img {
+    width: 52px; height: 52px; border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid var(--gold-mid);
+  }
+  .test-author-name {
+    font-family: var(--serif);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--gold);
+    display: block;
+  }
+  .test-author-role {
+    font-size: .72rem;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .test-dots {
+    display: flex; justify-content: center; gap: 8px;
+    margin-top: 48px;
+  }
+  .test-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--gold-dim);
+    border: none; cursor: none;
+    transition: all .3s;
+  }
+  .test-dot.active { background: var(--gold); transform: scale(1.4); }
+
+  /* CONTACT */
+  .contact { background: var(--burgundy-deep); }
+  .contact-inner {
+    max-width: 1300px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 80px; align-items: start;
+  }
+  .contact-info h2 { margin-bottom: 30px; }
+  .contact-info p { color: var(--text-muted); line-height: 1.9; margin-bottom: 48px; font-size: .93rem; }
+  .contact-detail {
+    display: flex; gap: 16px; align-items: flex-start;
+    margin-bottom: 24px;
+  }
+  .contact-detail-icon {
+    color: var(--gold); font-size: 1.1rem;
+    margin-top: 2px; flex-shrink: 0;
+  }
+  .contact-detail-text span {
+    display: block; font-size: .68rem;
+    letter-spacing: .2em; text-transform: uppercase;
+    color: var(--text-muted); margin-bottom: 4px;
+  }
+  .contact-detail-text strong { color: var(--text-light); font-weight: 400; font-size: .9rem; }
+
+  /* CONSULTATION FORM */
+  .consult-form {
+    background: rgba(26,5,8,.6);
+    border: 1px solid var(--gold-dim);
+    padding: 50px;
+  }
+  .consult-form h3 {
+    font-family: var(--serif);
+    font-size: 1.8rem;
+    font-weight: 300;
+    margin-bottom: 8px;
+    color: var(--text-light);
+  }
+  .form-eyebrow {
+    font-size: .68rem; letter-spacing: .3em;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 36px; display: block;
+  }
+  .form-group { margin-bottom: 24px; }
+  .form-group label {
+    display: block; font-size: .68rem;
+    letter-spacing: .2em; text-transform: uppercase;
+    color: var(--text-muted); margin-bottom: 8px;
+  }
+  .form-group input,
+  .form-group select {
+    width: 100%;
+    background: transparent;
+    border: none; border-bottom: 1px solid var(--gold-dim);
+    padding: 12px 0;
+    color: var(--text-light);
+    font-family: var(--sans);
+    font-size: .9rem;
+    outline: none;
+    transition: border-color .3s;
+    appearance: none;
+  }
+  .form-group input:focus,
+  .form-group select:focus { border-color: var(--gold); }
+  .form-group select option { background: var(--dark); }
+  .form-submit {
+    width: 100%;
+    background: var(--gold);
+    border: none;
+    padding: 18px;
+    font-family: var(--sans);
+    font-size: .8rem;
+    font-weight: 500;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    color: var(--dark);
+    cursor: none;
+    margin-top: 16px;
+    transition: all .4s cubic-bezier(.16,1,.3,1);
+  }
+  .form-submit:hover { background: var(--text-light); transform: translateY(-2px); }
+
+  /* FOOTER */
+  footer {
+    background: var(--dark);
+    padding: 60px;
+    border-top: 1px solid var(--gold-dim);
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 24px;
+  }
+  .footer-logo {
+    font-family: var(--serif);
+    font-size: 1.3rem;
+    color: var(--gold);
+    font-weight: 600;
+  }
+  .footer-logo span { color: var(--text-muted); font-weight: 300; font-style: italic; }
+  .footer-copy {
+    font-size: .7rem;
+    letter-spacing: .1em;
+    color: var(--text-muted);
+  }
+  .footer-socials { display: flex; gap: 24px; }
+  .footer-socials a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: .7rem;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    transition: color .3s;
+  }
+  .footer-socials a:hover { color: var(--gold); }
+
+  /* GOLD SEPARATOR */
+  .gold-sep {
+    max-width: 1300px; margin: 0 auto;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-mid), transparent);
+  }
+
+  /* MAP PLACEHOLDER */
+  .map-wrap {
+    width: 100%; height: 260px;
+    background: rgba(91,14,20,.3);
+    border: 1px solid var(--gold-dim);
+    margin-top: 40px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-muted);
+    font-size: .8rem;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    overflow: hidden;
+    position: relative;
+  }
+  .map-wrap iframe {
+    width: 100%; height: 100%; border: none;
+    filter: grayscale(80%) sepia(40%) hue-rotate(300deg) brightness(.7);
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 1024px) {
+    nav { padding: 22px 30px; }
+    nav.solid { padding: 14px 30px; }
+    .nav-links { display: none; }
+    section { padding: 80px 30px; }
+    .about-inner { grid-template-columns: 1fr; gap: 50px; }
+    .about-img-wrap { height: 420px; }
+    .services-grid { grid-template-columns: repeat(2,1fr); }
+    .portfolio-grid { grid-template-columns: 1fr 1fr; grid-template-rows: 320px 320px 320px; }
+    .portfolio-item:first-child { grid-row: 1; }
+    .process-steps { grid-template-columns: 1fr 1fr; gap: 40px; }
+    .process-steps::before { display: none; }
+    .why-grid { grid-template-columns: repeat(2,1fr); }
+    .contact-inner { grid-template-columns: 1fr; }
+    .hero { padding: 0 30px 60px; }
+    .hero-scroll { right: 30px; bottom: 60px; }
+  }
+
+  @media (max-width: 640px) {
+    .services-grid { grid-template-columns: 1fr; }
+    .portfolio-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
+    .portfolio-item { height: 280px; }
+    .portfolio-item:first-child { grid-row: auto; height: 320px; }
+    .process-steps { grid-template-columns: 1fr; }
+    .why-grid { grid-template-columns: 1fr; }
+    .about-stats { grid-template-columns: 1fr 1fr; }
+    .consult-form { padding: 30px; }
+    footer { flex-direction: column; text-align: center; padding: 40px 30px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- CUSTOM CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- CINEMATIC INTRO -->
+<div id="intro">
+  <div class="intro-slide" id="slide0" style="background-image:url('https://images.unsplash.com/photo-1600210492493-0946911123ea?w=1920&q=80')"></div>
+  <div class="intro-slide" id="slide1" style="background-image:url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1920&q=80')"></div>
+  <div class="intro-slide" id="slide2" style="background-image:url('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1920&q=80')"></div>
+  <div class="intro-slide" id="slide3" style="background-image:url('https://images.unsplash.com/photo-1631679706909-1844bbd07221?w=1920&q=80')"></div>
+  <div class="intro-overlay"></div>
+  <div class="intro-text">
+    <div class="intro-line" id="introLine1">Design That <em>Defines</em> Space</div>
+    <div class="intro-divider" id="introDivider"></div>
+    <div class="intro-line" id="introLine2">Luxury Interiors. Crafted Precision.</div>
+    <div class="intro-sub" id="introSub">MakeMyInteriors · Mumbai</div>
+  </div>
+  <button class="intro-skip" onclick="skipIntro()">Skip ↓</button>
+  <div class="intro-progress"><div class="intro-progress-bar" id="progressBar"></div></div>
+</div>
+
+<!-- MAIN -->
+<div id="main">
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <a href="#" class="nav-logo">MakeMy<span>Interiors</span></a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#portfolio">Portfolio</a></li>
+      <li><a href="#process">Process</a></li>
+      <li><a href="#contact" class="nav-cta">Consult</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow reveal">Luxury Interior Design · Mumbai</div>
+      <h1 class="reveal reveal-delay-1">
+        Transform Your
+        <strong>Living Space</strong>
+      </h1>
+      <p class="reveal reveal-delay-2">Bespoke interior solutions crafted for the discerning. Where architecture meets artistry and every detail speaks of refinement.</p>
+      <div class="hero-btns reveal reveal-delay-3">
+        <a href="#portfolio" class="btn-primary">View Projects</a>
+        <a href="#contact" class="btn-secondary">Book Consultation</a>
+      </div>
+    </div>
+    <div class="hero-scroll">
+      <div class="hero-scroll-line"></div>
+      <span>Scroll</span>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="about-inner">
+      <div class="about-img-wrap reveal">
+        <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=800&q=80" alt="Luxury Interior Design">
+        <div class="about-img-accent"></div>
+        <div class="about-img-tag">Est. 2015</div>
+      </div>
+      <div class="about-text">
+        <div class="section-label reveal">Our Philosophy</div>
+        <h2 class="reveal reveal-delay-1">Crafting Spaces <em>That Inspire</em></h2>
+        <p class="reveal reveal-delay-2">At MakeMyInteriors, we believe that great design transcends aesthetics. Every project is an intimate collaboration — a dialogue between your vision and our expertise, resulting in spaces that are unmistakably yours.</p>
+        <p class="reveal reveal-delay-3">Our approach is rooted in bespoke craftsmanship. We source rare materials, engage master artisans, and apply meticulous attention to every detail — from the sweep of an archway to the grain of custom joinery.</p>
+        <p class="reveal reveal-delay-4">End-to-end. From first concept sketch to final white-glove handover, we orchestrate every element of your transformation with precision and care.</p>
+        <div class="about-stats reveal">
+          <div>
+            <div class="stat-num">350+</div>
+            <div class="stat-label">Projects Completed</div>
+          </div>
+          <div>
+            <div class="stat-num">10+</div>
+            <div class="stat-label">Years of Mastery</div>
+          </div>
+          <div>
+            <div class="stat-num">98%</div>
+            <div class="stat-label">Client Satisfaction</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="services" id="services">
+    <div class="services-inner">
+      <div class="services-header">
+        <div>
+          <div class="section-label reveal">What We Create</div>
+          <h2 class="reveal reveal-delay-1">Our <em>Services</em></h2>
+        </div>
+        <a href="#contact" class="btn-secondary reveal reveal-delay-2" style="align-self:flex-end;">All Services →</a>
+      </div>
+      <div class="services-grid">
+        <div class="service-card reveal">
+          <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600&q=80" alt="Residential">
+          <div class="service-card-overlay"></div>
+          <div class="service-card-content">
+            <div class="service-icon">⬡</div>
+            <div class="service-gold-line"></div>
+            <h3>Residential Interiors</h3>
+            <p>Complete home transformation — from bare walls to bespoke luxury, curated for your lifestyle.</p>
+          </div>
+        </div>
+        <div class="service-card reveal reveal-delay-1">
+          <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80" alt="Kitchen">
+          <div class="service-card-overlay"></div>
+          <div class="service-card-content">
+            <div class="service-icon">◈</div>
+            <div class="service-gold-line"></div>
+            <h3>Modular Kitchens</h3>
+            <p>Precision-engineered culinary spaces where German hardware meets Indian sensibility.</p>
+          </div>
+        </div>
+        <div class="service-card reveal reveal-delay-2">
+          <img src="https://images.unsplash.com/photo-1631679706909-1844bbd07221?w=600&q=80" alt="Bedroom">
+          <div class="service-card-overlay"></div>
+          <div class="service-card-content">
+            <div class="service-icon">◇</div>
+            <div class="service-gold-line"></div>
+            <h3>Bedroom Interiors</h3>
+            <p>Private sanctuaries designed for rest and renewal — serene, personal, extraordinary.</p>
+          </div>
+        </div>
+        <div class="service-card reveal">
+          <img src="https://images.unsplash.com/photo-1600210492493-0946911123ea?w=600&q=80" alt="Living Room">
+          <div class="service-card-overlay"></div>
+          <div class="service-card-content">
+            <div class="service-icon">◉</div>
+            <div class="service-gold-line"></div>
+            <h3>Living Room Styling</h3>
+            <p>Statement living spaces that balance grandeur with warmth — the heart of your home.</p>
+          </div>
+        </div>
+        <div class="service-card reveal reveal-delay-1">
+          <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&q=80" alt="Space Planning">
+          <div class="service-card-overlay"></div>
+          <div class="service-card-content">
+            <div class="service-icon">⬟</div>
+            <div class="service-gold-line"></div>
+            <h3>Space Planning</h3>
+            <p>Intelligent spatial solutions that maximize functionality and flow in any footprint.</p>
+          </div>
+        </div>
+        <div class="service-card reveal reveal-delay-2">
+          <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=600&q=80" alt="Turnkey">
+          <div class="service-card-overlay"></div>
+          <div class="service-card-content">
+            <div class="service-icon">◈</div>
+            <div class="service-gold-line"></div>
+            <h3>Turnkey Solutions</h3>
+            <p>Complete end-to-end execution — design, procurement, installation, handover.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PORTFOLIO -->
+  <section class="portfolio" id="portfolio">
+    <div class="portfolio-header">
+      <div class="section-label reveal">Selected Works</div>
+      <h2 class="reveal reveal-delay-1">Our <em>Portfolio</em></h2>
+    </div>
+    <div class="portfolio-grid">
+      <div class="portfolio-item">
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=900&q=80" alt="The Wadia Residence">
+        <div class="portfolio-overlay"></div>
+        <div class="portfolio-info">
+          <span>Residential · Mumbai</span>
+          <h4>The Wadia Residence</h4>
+        </div>
+      </div>
+      <div class="portfolio-item">
+        <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600&q=80" alt="Pali Hill Villa">
+        <div class="portfolio-overlay"></div>
+        <div class="portfolio-info">
+          <span>Villa · Bandra</span>
+          <h4>Pali Hill Villa</h4>
+        </div>
+      </div>
+      <div class="portfolio-item">
+        <img src="https://images.unsplash.com/photo-1631679706909-1844bbd07221?w=600&q=80" alt="The Worli Suite">
+        <div class="portfolio-overlay"></div>
+        <div class="portfolio-info">
+          <span>Bedroom Suite</span>
+          <h4>The Worli Suite</h4>
+        </div>
+      </div>
+      <div class="portfolio-item">
+        <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80" alt="Juhu Kitchen">
+        <div class="portfolio-overlay"></div>
+        <div class="portfolio-info">
+          <span>Kitchen · Juhu</span>
+          <h4>The Juhu Kitchen</h4>
+        </div>
+      </div>
+      <div class="portfolio-item">
+        <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&q=80" alt="South Mumbai Penthouse">
+        <div class="portfolio-overlay"></div>
+        <div class="portfolio-info">
+          <span>Penthouse · South Mumbai</span>
+          <h4>Cuffe Parade Penthouse</h4>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section class="process" id="process">
+    <div class="process-inner">
+      <div class="section-label reveal">How We Work</div>
+      <h2 class="reveal reveal-delay-1">The Design <em>Journey</em></h2>
+      <div class="process-steps">
+        <div class="process-step reveal">
+          <div class="step-num">01</div>
+          <div class="step-title">Consultation</div>
+          <div class="step-desc">We listen deeply — your vision, lifestyle, aspirations. The foundation of every extraordinary space.</div>
+        </div>
+        <div class="process-step reveal reveal-delay-1">
+          <div class="step-num">02</div>
+          <div class="step-title">Concept Design</div>
+          <div class="step-desc">Mood boards, 3D renders, spatial layouts — your vision made tangible before a single nail is driven.</div>
+        </div>
+        <div class="process-step reveal reveal-delay-2">
+          <div class="step-num">03</div>
+          <div class="step-title">Material Selection</div>
+          <div class="step-desc">Curated materials, finishes, and furnishings from premium sources — each chosen for longevity and beauty.</div>
+        </div>
+        <div class="process-step reveal reveal-delay-3">
+          <div class="step-num">04</div>
+          <div class="step-title">Execution</div>
+          <div class="step-desc">Master craftsmen, supervised daily. Precision construction with zero compromise on quality or timeline.</div>
+        </div>
+        <div class="process-step reveal reveal-delay-4">
+          <div class="step-num">05</div>
+          <div class="step-title">Final Delivery</div>
+          <div class="step-desc">White-glove handover. Your home — transformed, immaculate, ready for the life you deserve.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY US -->
+  <section class="why" id="why">
+    <div class="why-inner">
+      <div class="section-label reveal">The Difference</div>
+      <h2 class="reveal reveal-delay-1">Why Choose <em>Us</em></h2>
+      <div class="why-grid">
+        <div class="why-card reveal">
+          <span class="why-icon">✦</span>
+          <h3>Premium Materials Only</h3>
+          <p>We source exclusively from certified suppliers — Italian marble, European hardware, solid-wood joinery. Nothing less reaches your space.</p>
+        </div>
+        <div class="why-card reveal reveal-delay-1">
+          <span class="why-icon">◈</span>
+          <h3>Fully Customised</h3>
+          <p>No catalogues, no off-the-shelf. Every element is designed specifically for you — your dimensions, your palette, your identity.</p>
+        </div>
+        <div class="why-card reveal reveal-delay-2">
+          <span class="why-icon">⬡</span>
+          <h3>10+ Years of Mastery</h3>
+          <p>A decade of transforming Mumbai's finest homes — from Bandra penthouses to Worli sea-facing apartments.</p>
+        </div>
+        <div class="why-card reveal reveal-delay-3">
+          <span class="why-icon">◉</span>
+          <h3>End-to-End Execution</h3>
+          <p>One point of contact. Complete accountability. Design, procurement, construction, and delivery — seamlessly orchestrated.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials" id="testimonials">
+    <div class="test-inner">
+      <div class="section-label" style="justify-content:center">Client Stories</div>
+      <h2 class="reveal reveal-delay-1" style="text-align:center">Words of <em>Praise</em></h2>
+      <div class="test-carousel">
+        <div class="test-slide active">
+          <div class="test-quote">They turned our flat into a palace — every detail was considered, every material impeccable. The team at MakeMyInteriors understood our vision better than we did ourselves.</div>
+          <div class="test-author">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80" alt="Client" class="test-author-img">
+            <div>
+              <span class="test-author-name">Arjun Mehta</span>
+              <span class="test-author-role">3BHK Residence · Bandra West</span>
+            </div>
+          </div>
+        </div>
+        <div class="test-slide">
+          <div class="test-quote">Our modular kitchen is the envy of every guest. The team brought European precision to an Indian home — the result is simply breathtaking and a joy to use every single day.</div>
+          <div class="test-author">
+            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80" alt="Client" class="test-author-img">
+            <div>
+              <span class="test-author-name">Priya Sharma</span>
+              <span class="test-author-role">Turnkey Project · Juhu</span>
+            </div>
+          </div>
+        </div>
+        <div class="test-slide">
+          <div class="test-quote">On time, on budget, and beyond expectation. In 20 years of commissioning design work I have never encountered a team so thorough, so responsive, and so genuinely talented.</div>
+          <div class="test-author">
+            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&q=80" alt="Client" class="test-author-img">
+            <div>
+              <span class="test-author-name">Vikram Singhania</span>
+              <span class="test-author-role">Penthouse · Worli</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="test-dots">
+        <button class="test-dot active" data-idx="0"></button>
+        <button class="test-dot" data-idx="1"></button>
+        <button class="test-dot" data-idx="2"></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <div class="contact-inner">
+      <div class="contact-info">
+        <div class="section-label reveal">Begin Your Journey</div>
+        <h2 class="reveal reveal-delay-1">Let's Build Something <em>Extraordinary</em></h2>
+        <p class="reveal reveal-delay-2">Every great space begins with a conversation. Tell us your vision, and we'll bring the mastery to make it real.</p>
+        <div class="contact-detail reveal reveal-delay-2">
+          <div class="contact-detail-icon">📍</div>
+          <div class="contact-detail-text">
+            <span>Address</span>
+            <strong>Mumbai, Maharashtra, India</strong>
+          </div>
+        </div>
+        <div class="contact-detail reveal reveal-delay-3">
+          <div class="contact-detail-icon">📞</div>
+          <div class="contact-detail-text">
+            <span>Phone</span>
+            <strong>+91 98765 43210</strong>
+          </div>
+        </div>
+        <div class="contact-detail reveal reveal-delay-4">
+          <div class="contact-detail-icon">✉</div>
+          <div class="contact-detail-text">
+            <span>Email</span>
+            <strong>hello@makemyinteriors.in</strong>
+          </div>
+        </div>
+        <div class="map-wrap reveal">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d241317.11609823277!2d72.74109995!3d19.08250985!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c6306644edc1%3A0x5da4ed8f8d648c69!2sMumbai%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1700000000000"
+            allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
+      </div>
+
+      <div class="consult-form reveal reveal-delay-2">
+        <h3>Start Your Project</h3>
+        <span class="form-eyebrow">Free Consultation</span>
+        <div class="form-group">
+          <label>Your Name</label>
+          <input type="text" placeholder="Full name">
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" placeholder="+91 · · · · · · · · · ·">
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" placeholder="your@email.com">
+        </div>
+        <div class="form-group">
+          <label>Project Type</label>
+          <select>
+            <option value="" disabled selected>Select a service</option>
+            <option>Residential Interiors</option>
+            <option>Modular Kitchen</option>
+            <option>Bedroom Design</option>
+            <option>Living Room Styling</option>
+            <option>Space Planning</option>
+            <option>Full Turnkey Project</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Budget Range</label>
+          <select>
+            <option value="" disabled selected>Select budget</option>
+            <option>₹5L – ₹15L</option>
+            <option>₹15L – ₹30L</option>
+            <option>₹30L – ₹60L</option>
+            <option>₹60L – ₹1Cr</option>
+            <option>₹1Cr+</option>
+          </select>
+        </div>
+        <button class="form-submit">Start Your Project</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">MakeMy<span>Interiors</span></div>
+    <div class="footer-copy">© 2025 MakeMyInteriors. All rights reserved. Mumbai, India.</div>
+    <div class="footer-socials">
+      <a href="#">Instagram</a>
+      <a href="#">Houzz</a>
+      <a href="#">Pinterest</a>
+      <a href="#">LinkedIn</a>
+    </div>
+  </footer>
+
+</div><!-- /main -->
+
+<script>
+// CURSOR
+const cursor = document.getElementById('cursor');
+const cursorRing = document.getElementById('cursorRing');
+let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+document.addEventListener('mousemove', e => {
+  mouseX = e.clientX; mouseY = e.clientY;
+  cursor.style.left = mouseX + 'px';
+  cursor.style.top = mouseY + 'px';
+});
+
+function animateCursor() {
+  ringX += (mouseX - ringX) * .15;
+  ringY += (mouseY - ringY) * .15;
+  cursorRing.style.left = ringX + 'px';
+  cursorRing.style.top = ringY + 'px';
+  requestAnimationFrame(animateCursor);
+}
+animateCursor();
+
+// INTRO SEQUENCE
+const slides = document.querySelectorAll('.intro-slide');
+const introLine1 = document.getElementById('introLine1');
+const introLine2 = document.getElementById('introLine2');
+const introDivider = document.getElementById('introDivider');
+const introSub = document.getElementById('introSub');
+const progressBar = document.getElementById('progressBar');
+const intro = document.getElementById('intro');
+const main = document.getElementById('main');
+
+let currentSlide = 0;
+const SLIDE_DUR = 5000;
+const TOTAL_DUR = slides.length * SLIDE_DUR;
+let introTimeout;
+
+function showSlide(idx) {
+  slides.forEach(s => { s.classList.remove('active'); s.style.animation = 'none'; });
+  const s = slides[idx];
+  s.style.animation = '';
+  void s.offsetWidth;
+  s.classList.add('active');
+}
+
+function runIntro() {
+  showSlide(0);
+  progressBar.style.transition = `width ${TOTAL_DUR}ms linear`;
+  progressBar.style.width = '100%';
+
+  // Text reveal
+  setTimeout(() => { introLine1.classList.add('show'); }, 600);
+  setTimeout(() => { introDivider.classList.add('show'); }, 1200);
+  setTimeout(() => { introLine2.classList.add('show'); }, 1600);
+  setTimeout(() => { introSub.classList.add('show'); }, 2200);
+
+  // Cycle slides
+  let idx = 0;
+  const cycle = setInterval(() => {
+    idx = (idx + 1) % slides.length;
+    showSlide(idx);
+    if (idx === 0) clearInterval(cycle);
+  }, SLIDE_DUR);
+
+  introTimeout = setTimeout(() => {
+    endIntro();
+  }, TOTAL_DUR + 800);
+}
+
+function endIntro() {
+  clearTimeout(introTimeout);
+  intro.style.transition = 'opacity 1.2s ease';
+  intro.style.opacity = '0';
+  setTimeout(() => {
+    intro.style.display = 'none';
+    main.classList.add('visible');
+    triggerReveal();
+  }, 1200);
+}
+
+function skipIntro() { endIntro(); }
+
+runIntro();
+
+// NAV
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('solid', window.scrollY > 80);
+});
+
+// PARALLAX HERO
+const heroBg = document.getElementById('heroBg');
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  if (heroBg && y < window.innerHeight) {
+    heroBg.style.transform = `scale(1.05) translateY(${y * 0.4}px)`;
+  }
+});
+
+// REVEAL ON SCROLL
+const revealEls = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.12 });
+
+function triggerReveal() {
+  revealEls.forEach(el => observer.observe(el));
+}
+
+// TESTIMONIAL CAROUSEL
+const testSlides = document.querySelectorAll('.test-slide');
+const testDots = document.querySelectorAll('.test-dot');
+let testIdx = 0;
+let testTimer;
+
+function showTest(idx) {
+  testSlides.forEach(s => s.classList.remove('active'));
+  testDots.forEach(d => d.classList.remove('active'));
+  testSlides[idx].classList.add('active');
+  testDots[idx].classList.add('active');
+  testIdx = idx;
+}
+
+function nextTest() { showTest((testIdx + 1) % testSlides.length); }
+
+testDots.forEach(d => d.addEventListener('click', () => {
+  clearInterval(testTimer);
+  showTest(+d.dataset.idx);
+  testTimer = setInterval(nextTest, 5000);
+}));
+
+testTimer = setInterval(nextTest, 5000);
+
+// FORM SUBMIT
+document.querySelector('.form-submit').addEventListener('click', function() {
+  this.textContent = 'Request Sent ✓';
+  this.style.background = '#2d4a1e';
+  this.style.color = '#a8d88b';
+  setTimeout(() => {
+    this.textContent = 'Start Your Project';
+    this.style.background = '';
+    this.style.color = '';
+  }, 3000);
+});
+</script>
+</body>
+</html>
